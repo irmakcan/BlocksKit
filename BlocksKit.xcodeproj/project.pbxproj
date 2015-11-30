@@ -6,6 +6,21 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		4EE821DB1C0C7E2A0089FF9C /* MobileKitUniversalFramework */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 4EE821DC1C0C7E2A0089FF9C /* Build configuration list for PBXAggregateTarget "MobileKitUniversalFramework" */;
+			buildPhases = (
+				4EE821DF1C0C7E450089FF9C /* Create Universal Framework */,
+			);
+			dependencies = (
+				4EE821E61C0CA9D50089FF9C /* PBXTargetDependency */,
+			);
+			name = MobileKitUniversalFramework;
+			productName = MobileKitUniversalFramework;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		DB4CA4261B3A662A004B70F8 /* BKMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = DB4CA4051B3A662A004B70F8 /* BKMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB4CA4271B3A662A004B70F8 /* BKMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = DB4CA4051B3A662A004B70F8 /* BKMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -275,6 +290,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4EE821E51C0CA9D50089FF9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DB9B960F1B3A52A700940D20 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DB9B96171B3A52A700940D20;
+			remoteInfo = MobileBlocksKit;
+		};
 		DB4CA5D21B3A7A08004B70F8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DB9B960F1B3A52A700940D20 /* Project object */;
@@ -1055,6 +1077,9 @@
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Zachary Waldowski and Pandamonia LLC";
 				TargetAttributes = {
+					4EE821DB1C0C7E2A0089FF9C = {
+						CreatedOnToolsVersion = 7.1;
+					};
 					DB9B96171B3A52A700940D20 = {
 						CreatedOnToolsVersion = 7.0;
 					};
@@ -1094,6 +1119,7 @@
 				DB9B96211B3A52A700940D20 /* MobileBlocksKitTests */,
 				DB9B96511B3A531F00940D20 /* MobileBlocksKitLegacy */,
 				DBBDD1E41B3A553E008909B0 /* BlocksKit Mac Demo */,
+				4EE821DB1C0C7E2A0089FF9C /* MobileKitUniversalFramework */,
 			);
 		};
 /* End PBXProject section */
@@ -1136,6 +1162,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4EE821DF1C0C7E450089FF9C /* Create Universal Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Create Universal Framework";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target \"Mobile${PROJECT_NAME}\" ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\" clean build\nxcodebuild -target \"Mobile${PROJECT_NAME}\" -configuration ${CONFIGURATION} -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\" clean build\n\n# Step 2. Copy the framework structure (from iphoneos build) to the universal folder\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT_NAME}.framework\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n\n# Step 3. Copy Swift modules from iphonesimulator build (if it exists) to the copied framework directory\nSIMULATOR_SWIFT_MODULES_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework/Modules/${PROJECT_NAME}.swiftmodule/.\"\nif [ -d \"${SIMULATOR_SWIFT_MODULES_DIR}\" ]; then\ncp -R \"${SIMULATOR_SWIFT_MODULES_DIR}\" \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework/Modules/${PROJECT_NAME}.swiftmodule\"\nfi\n\n# Step 4. Create universal binary file using lipo and place the combined executable in the copied framework directory\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT_NAME}.framework/${PROJECT_NAME}\"\n\n# Step 5. Convenience step to copy the framework to the project's directory\nmkdir -p \"${PROJECT_DIR}/build/release\"\ncp -R \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework\" \"${PROJECT_DIR}/build/release\"\n\n# Step 6. Convenience step to open the project's directory in Finder\nopen \"${PROJECT_DIR}/build/release\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DB9B96131B3A52A700940D20 /* Sources */ = {
@@ -1336,6 +1379,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4EE821E61C0CA9D50089FF9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DB9B96171B3A52A700940D20 /* MobileBlocksKit */;
+			targetProxy = 4EE821E51C0CA9D50089FF9C /* PBXContainerItemProxy */;
+		};
 		DB4CA5D31B3A7A08004B70F8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DB9B96361B3A52E500940D20 /* BlocksKit */;
@@ -1365,6 +1413,28 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4EE821DD1C0C7E2A0089FF9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB4CA3FB1B3A624B004B70F8 /* iOS-Framework.xcconfig */;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				ENABLE_BITCODE = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4EE821DE1C0C7E2A0089FF9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB4CA3FB1B3A624B004B70F8 /* iOS-Framework.xcconfig */;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				ENABLE_BITCODE = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		DB9B962A1B3A52A700940D20 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DBBDD23E1B3A5782008909B0 /* Project-Debug.xcconfig */;
@@ -1388,6 +1458,7 @@
 			baseConfigurationReference = DB4CA3FB1B3A624B004B70F8 /* iOS-Framework.xcconfig */;
 			buildSettings = {
 				DEFINES_MODULE = YES;
+				DEPLOYMENT_POSTPROCESSING = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1409,7 +1480,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DB4CA3FB1B3A624B004B70F8 /* iOS-Framework.xcconfig */;
 			buildSettings = {
+				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1586,6 +1659,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4EE821DC1C0C7E2A0089FF9C /* Build configuration list for PBXAggregateTarget "MobileKitUniversalFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4EE821DD1C0C7E2A0089FF9C /* Debug */,
+				4EE821DE1C0C7E2A0089FF9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		DB9B96121B3A52A700940D20 /* Build configuration list for PBXProject "BlocksKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
