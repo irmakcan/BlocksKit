@@ -1052,7 +1052,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = BK;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Zachary Waldowski and Pandamonia LLC";
 				TargetAttributes = {
 					DB9B96171B3A52A700940D20 = {
@@ -1369,6 +1369,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DBBDD23E1B3A5782008909B0 /* Project-Debug.xcconfig */;
 			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
 			name = Debug;
