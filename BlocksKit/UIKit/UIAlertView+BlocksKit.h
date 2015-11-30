@@ -132,6 +132,6 @@
 @property (nonatomic, copy, setter = bk_setDidDismissBlock:) void (^bk_didDismissBlock)(UIAlertView *alertView, NSInteger buttonIndex) BK_ALERT_CONTROLLER_DEPRECATED;
 
 /** The block to be fired to determine whether the first non-cancel should be enabled */
-@property (nonatomic, copy, setter = bk_SetShouldEnableFirstOtherButtonBlock:) BOOL (^bk_shouldEnableFirstOtherButtonBlock)(UIAlertView *alertView) NS_AVAILABLE_IOS(5_0) BK_ALERT_CONTROLLER_DEPRECATED;
+@property (nonatomic, copy, setter = bk_SetShouldEnableFirstOtherButtonBlock:) BOOL (^bk_shouldEnableFirstOtherButtonBlock)(UIAlertView *alertView) NS_AVAILABLE_IOS(2_0) BK_ALERT_CONTROLLER_DEPRECATED;
 
 @end
