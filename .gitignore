@@ -1,7 +1,5 @@
-# Xcode
-build/*
+ld/
 *.pbxuser
-*.swp
 !default.pbxuser
 *.mode1v3
 !default.mode1v3
@@ -9,11 +7,16 @@ build/*
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-*.xcworkspace
-!default.xcworkspace
 xcuserdata
-profile
+*.xccheckout
 *.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+build/
+
 .DS_Store
 Notes.txt
 .idea
+
